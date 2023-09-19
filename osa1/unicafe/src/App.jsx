@@ -6,6 +6,18 @@ const Button = (props) => (
   </button>
 )
 
+const StatisticLine = (props) => {
+  if (props.text == "positive") {
+    return (
+      <div>{props.text} {props.value} %</div>
+    )
+  } else {
+    return (
+      <div>{props.text} {props.value}</div>
+    )
+  }
+}
+
 const Statistics = (props) => {
   const {good, neutral, bad} = props.feedback
   if (good+neutral+bad == 0) {
@@ -14,14 +26,16 @@ const Statistics = (props) => {
     ]
   }
   else {
-    return [
-      <div>Good {good}</div>,
-      <div>Neutral {neutral}</div>,
-      <div>Bad {bad}</div>,
-      <div>all {good+neutral+bad}</div>,
-      <div>average {(good*1+neutral*0+bad*-1)/(good+neutral+bad)}</div>,
-      <div>positive {good/(good+neutral+bad)} %</div>
-    ]
+    return (
+      <div>
+        <StatisticLine text="good" value ={good} />
+        <StatisticLine text="neutral" value ={neutral} />
+        <StatisticLine text="bad" value ={bad} />
+        <StatisticLine text="all" value={good+neutral+bad}/>
+        <StatisticLine text="average" value ={(good*1+neutral*0+bad*-1)/(good+neutral+bad)} />
+        <StatisticLine text="positive" value={good/(good+neutral+bad)}/>
+      </div>
+    )
   }
 }
 
