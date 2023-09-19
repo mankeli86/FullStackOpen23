@@ -9,14 +9,14 @@ const Button = (props) => (
 const StatisticLine = (props) => {
   if (props.text == "positive") {
     return (
-      <tr key={props.text}>
+      <tr>
         <td>{props.text}</td> 
         <td>{props.value} %</td>
       </tr>
     )
   } else {
     return (
-      <tr key={props.text}>
+      <tr>
         <td>{props.text}</td> 
         <td>{props.value}</td>
       </tr>
