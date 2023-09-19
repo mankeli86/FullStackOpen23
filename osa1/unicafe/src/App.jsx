@@ -8,14 +8,21 @@ const Button = (props) => (
 
 const Statistics = (props) => {
   const {good, neutral, bad} = props.feedback
-  return [
-    <div>Good {good}</div>,
-    <div>Neutral {neutral}</div>,
-    <div>Bad {bad}</div>,
-    <div>all {good+neutral+bad}</div>,
-    <div>average {(good*1+neutral*0+bad*-1)/(good+neutral+bad)}</div>,
-    <div>positive {good/(good+neutral+bad)} %</div>
-  ]
+  if (good+neutral+bad == 0) {
+    return [
+      <div>No feedback given</div>
+    ]
+  }
+  else {
+    return [
+      <div>Good {good}</div>,
+      <div>Neutral {neutral}</div>,
+      <div>Bad {bad}</div>,
+      <div>all {good+neutral+bad}</div>,
+      <div>average {(good*1+neutral*0+bad*-1)/(good+neutral+bad)}</div>,
+      <div>positive {good/(good+neutral+bad)} %</div>
+    ]
+  }
 }
 
 const App = () => {
