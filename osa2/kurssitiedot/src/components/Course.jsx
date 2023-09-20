@@ -1,12 +1,13 @@
 const Course = ({ course }) => {
-    console.log(course)
-    return (
-      <div>
-        <Header course={course}/>
-        <Content parts={course.parts}/>
-      </div>
-    )
-  }
+  console.log(course)
+  return (
+    <div>
+      <Header course={course}/>
+      <Content parts={course.parts}/>
+      <Total parts={course.parts}/>
+    </div>
+  )
+}
 
 const Header = (props) => {
   return [
@@ -21,9 +22,20 @@ const Content = (props) => {
 }
 
 const Part = (props) => {
-    return (
-      <p key={props.id}>{props.part} {props.exercises}</p>
-    )
-  }
+  return (
+    <p key={props.id}>{props.part} {props.exercises}</p>
+  )
+}
+
+const Total = (props) => {
+  let ex = props.parts.map(value => value.exercises);
+  return [
+    <p key={"total"}>total of {ex.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    )} exercises
+    </p>
+  ]
+}
 
 export default Course
