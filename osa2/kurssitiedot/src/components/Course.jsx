@@ -11,7 +11,7 @@ const Course = ({ course }) => {
 
 const Header = (props) => {
   return [
-   <h1 key={props.course.id}>{props.course.name}</h1>
+   <h2 key={props.course.id}>{props.course.name}</h2>
  ]
 }
   
