@@ -25,9 +25,10 @@ const PersonForm = ({ name, number, handleName, handleNumber, addNumber }) => {
   )
 }
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons, deleteNumber }) => {
   return (
-    persons.map(person => <div key={person.name}>{person.name} {person.number}</div>)
+    persons.map(person => <div key={person.name}>{person.name} {person.number} 
+    <button onClick={() => deleteNumber(person.id, person.name)}>delete</button></div>)
   )
 }
 
@@ -46,6 +47,22 @@ const App = () => {
         setFilteredNames(p)
       })
   }, [])
+  
+  const deleteFromPhonebook = (id, name) => {
+    const deleting = window.confirm(`Delete ${name} ?`)
+    if (deleting) {
+      contactService
+        .deleteContact(id)
+          .then(() => {
+            contactService
+              .getAll()
+                .then(p => {
+                  setPersons(p)
+                  setFilteredNames(p)
+                })
+          })
+    }
+  }
   
   const addToPhonebook = (event) => {
     event.preventDefault()
@@ -92,7 +109,7 @@ const App = () => {
       <PersonForm name={newName} number={newNumber} handleName={handleNameChange} 
         handleNumber={handleNumberChange} addNumber={addToPhonebook}/>
       <h2>Numbers</h2>
-      <Persons persons={filteredNames}/>
+      <Persons persons={filteredNames} deleteNumber={deleteFromPhonebook}/>
     </div>
   )
 
