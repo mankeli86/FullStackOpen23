@@ -72,7 +72,19 @@ const App = () => {
     }
     
     if (persons.includes(persons.find(p=>p.name==newName))) {
-      alert(`${newName} is already added to phonebook`)
+      const replace = confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+      if (replace) {
+        contactService
+          .update((persons.findIndex(p => p.name==newName)+1), nameObject)
+            .then(() => {
+              contactService
+                .getAll()
+                  .then(p => {
+                    setPersons(p)
+                    setFilteredNames(p)
+                  })
+            })
+      }
     }
     else {
       contactService
