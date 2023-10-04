@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import contactService from './contactService'
+import './index.css'
 
 const Filter = ({ search, handleSearch }) => {
   return (
@@ -32,12 +33,25 @@ const Persons = ({ persons, deleteNumber }) => {
   )
 }
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameSearch, setNameSearch] = useState('')
   const [filteredNames, setFilteredNames] = useState(persons)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     contactService
@@ -61,6 +75,12 @@ const App = () => {
                   setFilteredNames(p)
                 })
           })
+      setErrorMessage(
+        `${name} was deleted`
+      )
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 3000)
     }
   }
   
@@ -84,6 +104,12 @@ const App = () => {
                     setFilteredNames(p)
                   })
             })
+        setErrorMessage(
+          `${newName} was changed`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 3000)
       }
     }
     else {
@@ -93,6 +119,12 @@ const App = () => {
           setPersons(persons.concat(returnedNames))
           setFilteredNames(persons.concat(returnedNames))
           })
+      setErrorMessage(
+        `${newName} was added`
+      )
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 3000)
     }
     setNewName('')
     setNewNumber('')
@@ -116,6 +148,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter search={nameSearch} handleSearch={handleSearchChange}/>
       <h2>Add a new</h2>
       <PersonForm name={newName} number={newNumber} handleName={handleNameChange} 
