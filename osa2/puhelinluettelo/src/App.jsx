@@ -102,14 +102,27 @@ const App = () => {
                   .then(p => {
                     setPersons(p)
                     setFilteredNames(p)
+                    setErrorMessage(
+                      `${newName} was changed`
+                    )
+                    setTimeout(() => {
+                      setErrorMessage(null)
+                    }, 3000)
                   })
             })
-        setErrorMessage(
-          `${newName} was changed`
-        )
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 3000)
+          .catch(error => {
+            setErrorMessage(`Information of ${newName} has already been removed from server`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 3000)
+            
+            contactService
+              .getAll()
+                .then(p => {
+                  setPersons(p)
+                  setFilteredNames(p)
+                })
+          })
       }
     }
     else {
