@@ -25,10 +25,10 @@ const Country = ({ country }) => {
   )
 }
 
-const Countries = ({ countries, countryDetail, searchNotEmpty }) => {
+const Countries = ({ countries, countryDetail, searchNotEmpty, showButton }) => {
   if (countries.length <= 10 && countries.length > 1) {
     return (
-      countries.map(country => <div key={country.cca2}>{country.name.common}</div>)
+      countries.map(country => <div key={country.cca2}>{country.name.common} <button onClick={() => showButton(country)}>show</button></div>)
     )
   }
   if (countries.length > 10) {
@@ -48,7 +48,7 @@ const Countries = ({ countries, countryDetail, searchNotEmpty }) => {
 function App() {
   const [countrySearch, setCountrySearch] = useState('')
   const [country, setCountry] = useState(null)
-  const [countryDetail, setCountryDetail] = useState([])
+  const [countryDetail, setCountryDetail] = useState(null)
   const [countries, setCountries] = useState([])
   const [filteredCountries, setFilteredCountries] = useState([])
   const allCountriesUrl = "https://studies.cs.helsinki.fi/restcountries/api/all"
@@ -72,6 +72,10 @@ function App() {
     }
   }, [country])
   
+  const handleShowButton = (country) => {
+    setCountry(country)
+  }
+  
   const handleSearchChange = (event) => {
     setCountrySearch(event.target.value.toLowerCase())
     var updatedCountries = [...countries]
@@ -83,6 +87,7 @@ function App() {
       setCountry(null)
     }
     setFilteredCountries(updatedCountries)
+    setCountryDetail(null)
   }
 
   const searchNotEmpty = countrySearch.trim() !== '';
@@ -90,7 +95,8 @@ function App() {
   return (
     <div>
       <Filter search={countrySearch} handleSearch={handleSearchChange}/>,
-      <Countries countries={filteredCountries} countryDetail={country} searchNotEmpty={searchNotEmpty}/>
+      {!countryDetail && <Countries countries={filteredCountries} countryDetail={country} searchNotEmpty={searchNotEmpty} showButton={handleShowButton}/>}
+      {countryDetail && <Country country={countryDetail} />}
     </div>
   )
 }
