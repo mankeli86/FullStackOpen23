@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import axios from 'axios'
 
+const api_key = import.meta.env.VITE_SOME_KEY
+
 const Filter = ({ search, handleSearch }) => {
   return (
     <div>
@@ -11,6 +13,18 @@ const Filter = ({ search, handleSearch }) => {
 }
 
 const Country = ({ country }) => {
+  const [weather, setWeather] = useState(null)
+  const [weatherIcon, setWeatherIcon] = useState(null)
+  const weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q="
+  useEffect(() => {
+    axios
+      .get(`${weatherUrl}${country.capital}&appid=${api_key}&units=metric`)
+      .then(res => {
+        setWeather(res.data)
+        setWeatherIcon(res.data.weather[0].icon)
+      })
+    }, [country])
+  
   return (
     <div>
       <h2>{country.name.common}</h2>
@@ -21,6 +35,14 @@ const Country = ({ country }) => {
         {Object.values(country.languages).map((lang, index) => <li key={index}>{lang}</li>)}
       </ul>
       <img src={country.flags.png} />
+      <h2>Weather in {country.capital}</h2>
+      {weather && weatherIcon && (
+        <div>
+          <div>temperature {weather.main.temp} Celsius</div>
+          <img src={`https://openweathermap.org/img/wn/${weatherIcon}@4x.png`} />
+          <div>wind {weather.wind.speed} m/s</div>
+        </div>
+      )}
     </div>
   )
 }
