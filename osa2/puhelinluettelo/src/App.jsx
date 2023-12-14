@@ -90,12 +90,12 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    
-    if (persons.includes(persons.find(p=>p.name==newName))) {
+    const person = persons.find(p => p.name==newName)
+    if (person) {
       const replace = confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
       if (replace) {
         contactService
-          .update((persons.findIndex(p => p.name==newName)+1), nameObject)
+          .update(person.id, nameObject)
             .then(() => {
               contactService
                 .getAll()
