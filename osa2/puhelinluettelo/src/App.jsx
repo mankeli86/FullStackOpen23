@@ -96,32 +96,25 @@ const App = () => {
       if (replace) {
         contactService
           .update(person.id, nameObject)
-            .then(() => {
-              contactService
-                .getAll()
-                  .then(p => {
-                    setPersons(p)
-                    setFilteredNames(p)
-                    setErrorMessage(
-                      `${newName} was changed`
-                    )
-                    setTimeout(() => {
-                      setErrorMessage(null)
-                    }, 3000)
-                  })
-            })
+            .then(response => {
+              setErrorMessage(
+                `${newName} was changed`
+              )
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 3000)
+            })         
           .catch(error => {
-            setErrorMessage(`Information of ${newName} has already been removed from server`)
+            setErrorMessage(error.response.data.error)
             setTimeout(() => {
               setErrorMessage(null)
             }, 3000)
-            
-            contactService
-              .getAll()
-                .then(p => {
-                  setPersons(p)
-                  setFilteredNames(p)
-                })
+          })       
+      contactService
+        .getAll()
+          .then(p => {
+            setPersons(p)
+            setFilteredNames(p)
           })
       }
     }
