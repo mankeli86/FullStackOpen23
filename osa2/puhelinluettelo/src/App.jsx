@@ -131,13 +131,19 @@ const App = () => {
           .then(returnedNames => {
           setPersons(persons.concat(returnedNames))
           setFilteredNames(persons.concat(returnedNames))
-          })
-      setErrorMessage(
-        `${newName} was added`
-      )
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 3000)
+          setErrorMessage(
+            `${newName} was added`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 3000)
+        })
+        .catch(error => {
+          setErrorMessage(error.response.data.error)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 3000)
+        })
     }
     setNewName('')
     setNewNumber('')
