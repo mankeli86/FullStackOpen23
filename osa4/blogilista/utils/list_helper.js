@@ -24,11 +24,37 @@ const favoriteBlog = (blogs) => {
   } else {
     return {}
   }
+}
 
+const mostBlogs = (blogs) => {
+  if (Array.isArray(blogs) && blogs.length) {
+    const blogsByAuthor = blogs.reduce((a, b) => {
+      (a[b.author] = a[b.author] || []).push(b)
+      return a
+    }, {})
+    
+    const [authorWithMostBlogs, blogsOfAuthor] = Object.entries(blogsByAuthor).reduce(
+      ([maxAuthor, maxBlogs], [author, blogs]) => {
+        if (!maxAuthor || blogs.length > maxBlogs.length) {
+          return [author, blogs]
+        } else {
+          return [maxAuthor, maxBlogs]
+        }
+      },
+      [null, []]
+    )
+    return {
+      author: authorWithMostBlogs,
+      blogs: blogsOfAuthor.length
+    }
+  } else {
+    return {}
+  }
 }
 
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
