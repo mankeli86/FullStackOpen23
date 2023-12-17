@@ -3,6 +3,8 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
 
 const initialBlogs = [
   {
@@ -147,8 +149,80 @@ test('a blog can be updated', async () => {
   expect(updatedBlogs.body[0].likes).toBe(10)
 })
 
+test('user creation fails when username is not unique or is too short', async () => {
+  const usersInDbStart = await Blog.find({})
+
+  const newUser1 = {
+    username: 'root',
+    name: 'su',
+    password: '1234'
+  }
+
+  const result1 = await api
+    .post('/api/users')
+    .send(newUser1)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  expect(result1.body.error).toContain('expected `username` to be unique')
+
+  const newUser2 = {
+    username: 'r',
+    name: 'su',
+    password: '1234'
+  }
+
+  const result2 = await api
+    .post('/api/users')
+    .send(newUser2)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  expect(result2.body.error).toContain('is shorter than the minimum allowed length')
+
+  const usersInDbEnd = await Blog.find({})
+  expect(usersInDbEnd).toHaveLength(usersInDbStart.length)
+})
+
+test('user creation fails when password is too short or does not exist', async () => {
+  const usersInDbStart = await Blog.find({})
+
+  const newUser1 = {
+    username: 'root2',
+    name: 'su',
+    password: '1'
+  }
+
+  const result1 = await api
+    .post('/api/users')
+    .send(newUser1)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  expect(result1.body.error).toContain('password must be atleast 3 characters')
+
+  const newUser2 = {
+    username: 'root2',
+    name: 'su'
+  }
+
+  const result2 = await api
+    .post('/api/users')
+    .send(newUser2)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  expect(result2.body.error).toContain('password must be atleast 3 characters')
+
+  const usersInDbEnd = await Blog.find({})
+  expect(usersInDbEnd).toHaveLength(usersInDbStart.length)
+})
+
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
+  let userObject = new User({ username: 'root', name: 'su', password: '123'})
+  await userObject.save()
   let blogObject = new Blog(initialBlogs[0])
   await blogObject.save()
   blogObject = new Blog(initialBlogs[1])
