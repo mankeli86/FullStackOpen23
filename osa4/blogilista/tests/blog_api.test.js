@@ -112,6 +112,41 @@ test('blog without url is not added', async () => {
   expect(res.body).toHaveLength(initialBlogs.length)
 })
 
+test('a blog can be deleted', async () => {
+  const blogsInDb = await Blog.find({})
+  const blogToDelete = blogsInDb.map(blog => blog.toJSON())[0]
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const res = await api.get('/api/blogs')
+  expect(res.body).toHaveLength(initialBlogs.length - 1)
+})
+
+test('deleting blog with non-existing id returns 400', async () => {
+  await api
+    .delete('/api/blogs/nonexisting')
+    .expect(400)
+})
+
+test('a blog can be updated', async () => {
+  const blogsInDb = await Blog.find({})
+  const blogToUpdate = blogsInDb.map(blog => blog.toJSON())[0]
+  const updated = {
+    title: "React patterns",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
+    likes: 10
+  }
+  
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(updated)
+
+  const updatedBlogs = await api.get('/api/blogs')
+  expect(updatedBlogs.body[0].likes).toBe(10)
+})
+
 beforeEach(async () => {
   await Blog.deleteMany({})
   let blogObject = new Blog(initialBlogs[0])
