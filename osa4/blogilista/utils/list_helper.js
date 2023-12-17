@@ -70,7 +70,6 @@ const mostLikes = (blogs) => {
       },
       [null, 0]
     )
-    console.log(authorWithMostLikes, likesOfAuthor)
     return {
       author: authorWithMostLikes,
       likes: likesOfAuthor 
