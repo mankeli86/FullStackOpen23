@@ -184,6 +184,26 @@ test('user creation fails when username is not unique or is too short', async ()
   expect(usersInDbEnd).toHaveLength(usersInDbStart.length)
 })
 
+test('user creation fails when username does not exist', async () => {
+  const usersInDbStart = await Blog.find({})
+
+  const newUser = {
+    name: 'su',
+    password: '1234'
+  }
+
+  const result = await api
+    .post('/api/users')
+    .send(newUser)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  expect(result.body.error).toContain('`username` is required')
+
+  const usersInDbEnd = await Blog.find({})
+  expect(usersInDbEnd).toHaveLength(usersInDbStart.length)
+})
+
 test('user creation fails when password is too short or does not exist', async () => {
   const usersInDbStart = await Blog.find({})
 
