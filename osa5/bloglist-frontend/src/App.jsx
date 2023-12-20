@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs => {
       setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
-    })  
+    })
   }, [updateBlogs])
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const App = () => {
   }
 
   const addBlog = async (blogObject) => {
-    
+
     blogFormRef.current.toggleVisibility()
     try {
       const response = await blogService.create(blogObject)
@@ -90,7 +90,7 @@ const App = () => {
       }, 4000)
     }
   }
-  
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -128,7 +128,7 @@ const App = () => {
       </Togglable>
     )
   }
-  
+
   if (user === null) {
     return (
       <div>
@@ -144,7 +144,7 @@ const App = () => {
       </div>
     )
   }
-  
+
   return (
     <div>
       <h2>blogs</h2>

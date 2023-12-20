@@ -17,7 +17,7 @@ const BlogForm = ({ createBlog }) => {
     setBlogAuthor('')
     setBlogUrl('')
   }
-  
+
   return (
     <form onSubmit={addBlog}>
       title:<input value={blogTitle} onChange={event => setBlogTitle(event.target.value)}/>

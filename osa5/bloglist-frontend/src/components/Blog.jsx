@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const Blog = ({ blog, updateBlog, removeBlog, loggedUser }) => {
   const [showAll, setShowAll] = useState(false)
-  
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -10,7 +10,7 @@ const Blog = ({ blog, updateBlog, removeBlog, loggedUser }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  
+
   const toggleVisibility = () => {
     setShowAll(!showAll)
   }
@@ -59,6 +59,6 @@ const Blog = ({ blog, updateBlog, removeBlog, loggedUser }) => {
         </div>
       )}
     </div>
-)}
+  )}
 
 export default Blog
