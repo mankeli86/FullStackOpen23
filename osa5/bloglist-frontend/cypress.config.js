@@ -1,4 +1,4 @@
-import { defineConfig } from "cypress";
+import { defineConfig } from 'cypress'
 
 export default defineConfig({
   e2e: {
@@ -9,4 +9,4 @@ export default defineConfig({
   env: {
     BACKEND: 'http://localhost:3003/api'
   }
-});
+})
