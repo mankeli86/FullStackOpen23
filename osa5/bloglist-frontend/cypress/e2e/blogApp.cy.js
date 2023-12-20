@@ -1,6 +1,6 @@
 describe('Blog app', function() {
   beforeEach(function() {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
+    cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
     const user = {
       name: 'Test Man',
       username: 'test',
@@ -11,9 +11,9 @@ describe('Blog app', function() {
       username: 'tester',
       password: '123'
     }
-    cy.request('POST', 'http://localhost:3003/api/users/', user)
-    cy.request('POST', 'http://localhost:3003/api/users/', user2)  
-    cy.visit('http://localhost:5173')
+    cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
+    cy.request('POST', `${Cypress.env('BACKEND')}/users`, user2)  
+    cy.visit('')
   })
 
   it('Login form is shown', function() {
